@@ -6,38 +6,89 @@ class CheckoutSpec extends WordSpec with Matchers {
 
   "The checkout" when {
 
-    "no offers apply" should {
+    "there no offers" should {
 
-      "return the sum total of the items" in {
+      "contain the sum cost of all the items" in {
 
-        val items: Seq[Item] = Seq(Item("A", 50), Item("B", 30))
-        val offer = Offer(3 , 130)
+        val items = Seq(
+          Item("A", 50), Item("A", 50), Item("A", 50),
+          Item("B", 30), Item("B", 30)
+        )
 
-        Checkout.getTotal(items, Set(offer)) shouldBe 80
+        val checkout = Checkout(0, items)
+
+        Checkout.checkout(checkout, Set.empty).total shouldBe 210
+
       }
 
     }
 
-    "there is an applicable offer with no spare items" should {
+    "there is one offer" should {
 
-      "return the sum total adjusted for the offer" in {
+      "contain the offer price of the items which qualify" in {
+        val items = Seq(
+          Item("A", 50), Item("A", 50), Item("A", 50)
+        )
 
-        val items: Seq[Item] = Seq(Item("A", 50), Item("A", 50), Item("A", 50))
-        val offer = Offer(3 , 130)
+        val offers = Set(
+          Offer(3, 130, "A")
+        )
 
-        Checkout.getTotal(items, Set(offer)) shouldBe 130
+        val checkout = Checkout(0, items)
+
+        Checkout.checkout(checkout, offers).total shouldBe 130
+      }
+
+      "contain the offer price of the items which qualify plus the sum cost of the spare items" in {
+        val items = Seq(
+          Item("A", 50), Item("A", 50), Item("A", 50),
+          Item("B", 30), Item("B", 30)
+        )
+
+        val offers = Set(
+          Offer(3, 130, "A")
+        )
+
+        val checkout = Checkout(0, items)
+
+        Checkout.checkout(checkout, offers).total shouldBe 190
       }
 
     }
 
-    "there is an applicable offer with spare items" should {
+    "there are multiple offers" should {
 
-      "return the sum total adjusted for the offer" in {
+      "contain the offer prices of the items which qualify" in {
+        val items = Seq(
+          Item("A", 50), Item("A", 50), Item("A", 50),
+          Item("B", 30), Item("B", 30)
+        )
 
-        val items: Seq[Item] = Seq(Item("A", 50), Item("A", 50), Item("A", 50), Item("B", 30))
-        val offer = Offer(3 , 130)
+        val offers = Set(
+          Offer(3, 130, "A"),
+          Offer(2, 45, "B")
+        )
 
-        Checkout.getTotal(items, Set(offer)) shouldBe 160
+        val checkout = Checkout(0, items)
+
+        Checkout.checkout(checkout, offers).total shouldBe 175
+      }
+
+      "contain the offer prices of the items which qualify plus the sum cost of the spare items" in {
+        val items = Seq(
+          Item("A", 50), Item("A", 50), Item("A", 50),
+          Item("B", 30), Item("B", 30),
+          Item("C", 10)
+        )
+
+        val offers = Set(
+          Offer(3, 130, "A"),
+          Offer(2, 45, "B")
+        )
+
+        val checkout = Checkout(0, items)
+
+        Checkout.checkout(checkout, offers).total shouldBe 185
       }
 
     }
