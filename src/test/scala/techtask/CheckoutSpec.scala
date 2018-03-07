@@ -11,8 +11,8 @@ class CheckoutSpec extends WordSpec with Matchers {
       "contain the sum cost of all the items" in {
 
         val items = Seq(
-          Item("A", 50), Item("A", 50), Item("A", 50),
-          Item("B", 30), Item("B", 30)
+          Item('A', 50), Item('A', 50), Item('A', 50),
+          Item('B', 30), Item('B', 30)
         )
 
         val checkout = Checkout(0, items)
@@ -27,11 +27,11 @@ class CheckoutSpec extends WordSpec with Matchers {
 
       "contain the offer price of the items which qualify" in {
         val items = Seq(
-          Item("A", 50), Item("A", 50), Item("A", 50)
+          Item('A', 50), Item('A', 50), Item('A', 50)
         )
 
         val offers = Set(
-          Offer(3, 130, "A")
+          Offer(xForY(3, 130), Some('A'))
         )
 
         val checkout = Checkout(0, items)
@@ -41,12 +41,12 @@ class CheckoutSpec extends WordSpec with Matchers {
 
       "contain the offer price of the items which qualify plus the sum cost of the spare items" in {
         val items = Seq(
-          Item("A", 50), Item("A", 50), Item("A", 50),
-          Item("B", 30), Item("B", 30)
+          Item('A', 50), Item('A', 50), Item('A', 50),
+          Item('B', 30), Item('B', 30)
         )
 
         val offers = Set(
-          Offer(3, 130, "A")
+          Offer(xForY(3, 130), Some('A'))
         )
 
         val checkout = Checkout(0, items)
@@ -60,13 +60,13 @@ class CheckoutSpec extends WordSpec with Matchers {
 
       "contain the offer prices of the items which qualify" in {
         val items = Seq(
-          Item("A", 50), Item("A", 50), Item("A", 50),
-          Item("B", 30), Item("B", 30)
+          Item('A', 50), Item('A', 50), Item('A', 50),
+          Item('B', 30), Item('B', 30)
         )
 
         val offers = Set(
-          Offer(3, 130, "A"),
-          Offer(2, 45, "B")
+          Offer(xForY(3, 130), Some('A')),
+          Offer(xForY(2, 45), Some('B'))
         )
 
         val checkout = Checkout(0, items)
@@ -76,14 +76,14 @@ class CheckoutSpec extends WordSpec with Matchers {
 
       "contain the offer prices of the items which qualify plus the sum cost of the spare items" in {
         val items = Seq(
-          Item("A", 50), Item("A", 50), Item("A", 50),
-          Item("B", 30), Item("B", 30),
-          Item("C", 10)
+          Item('A', 50), Item('A', 50), Item('A', 50),
+          Item('B', 30), Item('B', 30),
+          Item('C', 10)
         )
 
         val offers = Set(
-          Offer(3, 130, "A"),
-          Offer(2, 45, "B")
+          Offer(xForY(3, 130), Some('A')),
+          Offer(xForY(2, 45), Some('B'))
         )
 
         val checkout = Checkout(0, items)
